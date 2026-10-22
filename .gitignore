@@ -1,0 +1,20 @@
+# Python artifacts
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.pytest_cache/
+
+# Virtual Environment
+.venv/
+env/
+venv/
+ENV/
+
+# Streamlit
+.streamlit/secrets.toml
+
+# Confidential / Proprietary Raw MCX Market Data (Requirement 11)
+data/raw/
+*.csv.bak
+*.xlsx.bak

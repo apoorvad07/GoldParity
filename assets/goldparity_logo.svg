@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 380 72" width="380" height="72">
+  <defs>
+    <linearGradient id="logoGold" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#F4D18A" />
+      <stop offset="50%" stop-color="#D8A84E" />
+      <stop offset="100%" stop-color="#B88628" />
+    </linearGradient>
+    <linearGradient id="logoDarkBg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#111821" />
+      <stop offset="100%" stop-color="#080B10" />
+    </linearGradient>
+  </defs>
+
+  <!-- Emblem Icon on Left -->
+  <g transform="translate(2, 6) scale(0.60)">
+    <polygon points="50,4 92,26 92,74 50,96 8,74 8,26" fill="url(#logoDarkBg)" stroke="url(#logoGold)" stroke-width="3" />
+    <path d="M 62,24 C 40,18 20,28 20,50 C 20,72 40,82 64,78 C 76,76 82,68 82,56 L 56,56" 
+          fill="none" stroke="url(#logoGold)" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" />
+    <path d="M 42,30 L 42,72 M 42,30 L 60,30 C 69,30 73,35 73,43 C 73,51 68,54 42,54" 
+          fill="none" stroke="url(#logoGold)" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" />
+    <line x1="30" y1="44" x2="30" y2="58" stroke="url(#logoGold)" stroke-width="1.5" />
+    <rect x="28.5" y="47" width="3" height="7" fill="url(#logoGold)" rx="0.5" />
+    <line x1="35" y1="38" x2="35" y2="54" stroke="url(#logoGold)" stroke-width="1.5" />
+    <rect x="33.5" y="41" width="3" height="8" fill="url(#logoGold)" rx="0.5" />
+    <line x1="54" y1="22" x2="54" y2="38" stroke="#F4D18A" stroke-width="1.5" />
+    <rect x="52.5" y="25" width="3" height="8" fill="#F4D18A" rx="0.5" />
+  </g>
+
+  <!-- Brand Typography -->
+  <text x="74" y="37" font-family="'Cinzel', 'Playfair Display', Georgia, serif" font-size="24" font-weight="800" letter-spacing="0.06em" fill="#F5F5F2">
+    GOLD<tspan fill="url(#logoGold)">PARITY</tspan>
+  </text>
+  
+  <!-- Tagline -->
+  <text x="75" y="54" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.5" font-weight="700" letter-spacing="0.24em" fill="#A8B0BA">
+    REAL DATA. TRUE VALUE.
+  </text>
+
+  <!-- Accent Divider -->
+  <line x1="75" y1="43" x2="245" y2="43" stroke="url(#logoGold)" stroke-width="0.75" opacity="0.4" />
+</svg>
