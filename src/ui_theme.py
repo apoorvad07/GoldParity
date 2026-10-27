@@ -113,9 +113,18 @@ def get_global_css() -> str:
         font-feature-settings: "tnum" 1, "cv05" 1;
     }}
 
-    /* Container Bounds */
+    /* Top Header Bar (Frosted Glass Foundation) */
+    header[data-testid="stHeader"] {{
+        background: rgba(8, 11, 16, 0.90) !important;
+        backdrop-filter: blur(12px) !important;
+        -webkit-backdrop-filter: blur(12px) !important;
+        border-bottom: 1px solid rgba(216, 168, 78, 0.14) !important;
+        z-index: 99990 !important;
+    }}
+
+    /* Container Bounds - Safe Top Padding Below Fixed Header */
     .block-container {{
-        padding-top: 1.25rem !important;
+        padding-top: 4.75rem !important;
         padding-bottom: 2.5rem !important;
         max-width: 1440px !important;
     }}
@@ -593,18 +602,26 @@ def get_global_css() -> str:
 
     /* Demo Mode Watermark Banner */
     .demo-banner {{
-        background: rgba(17, 24, 33, 0.85);
-        border: 1px solid rgba(216, 168, 78, 0.28);
+        position: relative;
+        width: 100%;
+        box-sizing: border-box;
+        background: rgba(17, 24, 33, 0.90);
+        backdrop-filter: blur(8px);
+        -webkit-backdrop-filter: blur(8px);
+        border: 1px solid rgba(216, 168, 78, 0.32);
         border-left: 3px solid {COLOR_GOLD_PRIMARY};
         color: {COLOR_TEXT_PRIMARY};
         padding: 0.85rem 1.25rem;
-        border-radius: 6px;
+        border-radius: 8px;
         font-size: 0.84rem;
-        margin-bottom: 1.35rem;
+        line-height: 1.5;
+        margin-top: 0 !important;
+        margin-bottom: 1.5rem !important;
         display: flex;
         align-items: center;
-        gap: 0.95rem;
-        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
+        flex-wrap: wrap;
+        gap: 0.85rem;
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35);
     }}
     .demo-banner-tag {{
         background: rgba(216, 168, 78, 0.14);
@@ -618,6 +635,10 @@ def get_global_css() -> str:
         border-radius: 4px;
         font-family: 'JetBrains Mono', monospace;
         flex-shrink: 0;
+    }}
+    .demo-banner > div:last-child {{
+        flex: 1 1 280px;
+        min-width: 0;
     }}
 
     /* Empty States */
@@ -682,6 +703,41 @@ def get_global_css() -> str:
         color: #CBD5E1;
         font-size: 0.85rem;
         line-height: 1.65;
+    }}
+
+    /* Responsive Breakpoints & Clean Document Flow */
+    @media (max-width: 768px) {{
+        .block-container {{
+            padding-top: 4.75rem !important;
+            padding-left: 1rem !important;
+            padding-right: 1rem !important;
+        }}
+        .landing-hero {{
+            padding: 2rem 1.5rem 1.75rem 1.5rem !important;
+            margin-bottom: 1.5rem !important;
+        }}
+        .landing-headline {{
+            font-size: 1.85rem !important;
+            line-height: 1.2 !important;
+        }}
+        .landing-subtext {{
+            font-size: 0.92rem !important;
+            line-height: 1.5 !important;
+        }}
+        .demo-banner {{
+            padding: 0.75rem 1rem !important;
+            gap: 0.65rem !important;
+            margin-bottom: 1.25rem !important;
+        }}
+        .hero-container {{
+            padding: 1.25rem 1.25rem !important;
+        }}
+        .hero-headline {{
+            font-size: 1.45rem !important;
+        }}
+        .section-banner {{
+            padding: 1.25rem 1.25rem !important;
+        }}
     }}
 </style>
 """
