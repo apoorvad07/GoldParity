@@ -277,7 +277,7 @@ raw_df: Optional[pd.DataFrame] = None
 ingestion_rep: Optional[IngestionReport] = None
 local_repo_rep: Optional[LocalRepoReport] = None
 is_synthetic = False
-data_source_label = "Awaiting Data"
+data_source_label = "Awaiting Dataset Ingestion"
 
 if data_source_mode == "Local MCX Repository (data/raw/)":
     try:
@@ -285,20 +285,20 @@ if data_source_mode == "Local MCX Repository (data/raw/)":
             raw_dir="data/raw",
             include_gold_benchmark=include_gold_benchmark,
         )
-        data_source_label = f"Local MCX Repository ({local_repo_rep.files_loaded} files, {local_repo_rep.total_rows} records)"
+        data_source_label = f"Local MCX Historical ({local_repo_rep.files_loaded} files, {local_repo_rep.total_rows} records)"
         is_synthetic = False
     except Exception as exc:
         st.error(f"Error loading local MCX repository: {exc}")
 elif uploaded_file is not None:
     try:
         raw_df, ingestion_rep = read_market_data(uploaded_file, filename=uploaded_file.name)
-        data_source_label = f"MCX Bhavcopy: {uploaded_file.name}"
+        data_source_label = f"Uploaded Bhavcopy: {uploaded_file.name} (Historical)"
         is_synthetic = False
     except Exception as exc:
         st.error(f"Error reading uploaded file: {exc}")
 elif demo_mode:
     raw_df = load_synthetic_dataset(num_days=30 if nav_choice == "Backtesting" else 1)
-    data_source_label = "Synthetic Demonstration Data"
+    data_source_label = "Synthetic Demonstration Dataset (Sample Observations)"
     is_synthetic = True
 
 
@@ -351,13 +351,13 @@ with st.sidebar:
 # Status badge rendering helper with subtle gold initial badge
 if not is_synthetic and not enriched_df.empty:
     if local_repo_rep:
-        badge_html = f'<span class="badge-live"><span class="gold-initial-badge">L</span> Local MCX Data ({len(local_repo_rep.contracts_found)} Contracts)</span>'
+        badge_html = f'<span class="badge-live"><span class="gold-initial-badge">L</span> Local Historical ({len(local_repo_rep.contracts_found)} Contracts)</span>'
     else:
-        badge_html = '<span class="badge-live"><span class="gold-initial-badge">U</span> Uploaded MCX Data</span>'
+        badge_html = '<span class="badge-live"><span class="gold-initial-badge">U</span> Uploaded Historical</span>'
 elif is_synthetic:
-    badge_html = '<span class="badge-demo"><span class="gold-initial-badge">D</span> Demo Mode</span>'
+    badge_html = '<span class="badge-demo"><span class="gold-initial-badge">D</span> Synthetic Demo</span>'
 else:
-    badge_html = '<span class="badge-idle"><span class="status-dot status-dot-idle"></span>Awaiting Data</span>'
+    badge_html = '<span class="badge-idle"><span class="status-dot status-dot-idle"></span>Awaiting Ingestion</span>' 
 
 selected_date_str = selected_date.strftime("%d-%b-%Y") if available_dates else "None Selected"
 
@@ -547,66 +547,85 @@ if nav_choice == "Home":
 
     # Dynamic Bottom Information Strip
     if local_repo_rep and local_repo_rep.files_loaded > 0:
-        coverage_title = f"Local MCX Repository Connected ({local_repo_rep.files_loaded} Files)"
-        coverage_sub = f"Loaded {local_repo_rep.total_rows} observations spanning {local_repo_rep.date_range[0]} to {local_repo_rep.date_range[1]} across {len(local_repo_rep.contracts_found)} active contract series."
+        coverage_title = f"Local MCX Historical Repository ({local_repo_rep.files_loaded} Files Ingested)"
+        coverage_sub = f"Loaded {local_repo_rep.total_rows} historical observations spanning {local_repo_rep.date_range[0]} to {local_repo_rep.date_range[1]} across {len(local_repo_rep.contracts_found)} active contract series (offline local CSV bhavcopies)."
         detected_contracts = local_repo_rep.contracts_found
     elif uploaded_file is not None:
         coverage_title = f"Bhavcopy File Ingested: {uploaded_file.name}"
-        coverage_sub = f"Normalized {len(clean_df)} records across {len(clean_df['Symbol'].unique()) if not clean_df.empty else 0} contracts."
+        coverage_sub = f"Normalized {len(clean_df)} historical records across {len(clean_df['Symbol'].unique()) if not clean_df.empty else 0} contracts from user-provided file."
         detected_contracts = sorted(clean_df["Symbol"].unique().tolist()) if not clean_df.empty else []
     elif is_synthetic:
-        coverage_title = "Synthetic Demonstration Dataset Active (v1)"
-        coverage_sub = "Simulated multi-day market observations for UI and algorithmic validation. Real data never fabricated."
+        coverage_title = "Synthetic Demonstration Dataset Active (Sample Observations)"
+        coverage_sub = "Deterministic multi-day synthetic observations for interface and pipeline demonstration. Real market observations are never fabricated."
         detected_contracts = ["GOLDM", "GOLDTEN", "GOLDGUINEA", "GOLDPETAL"]
     else:
-        coverage_title = "Market Data Repository Ready"
-        coverage_sub = "Awaiting dataset ingestion. Select Local Repository, upload MCX Bhavcopy, or activate Demo Mode in sidebar."
+        coverage_title = "Market Data Repository Awaiting Ingestion"
+        coverage_sub = "No market data loaded yet. Select Local Repository, upload MCX Bhavcopy, or activate Demo Mode in sidebar."
         detected_contracts = ["GOLDM", "GOLDTEN", "GOLDGUINEA", "GOLDPETAL"]
 
     badges_html = " ".join([f'<span class="hallmark-badge">{sym}</span>' for sym in detected_contracts])
 
-    st.markdown(
-        f"""
-        <div class="bottom-info-strip">
-            <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 1.25rem; margin-bottom: 1.25rem;">
-                <div>
-                    <div style="font-size: 0.7rem; font-weight: 700; color: #D8A84E; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 0.35rem;">
-                        Market Repository Coverage & Metrics
+    with st.container():
+        st.markdown(
+            f"""<div class="bottom-info-strip">
+                <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 1.25rem;">
+                    <div>
+                        <div style="font-size: 0.7rem; font-weight: 700; color: #D8A84E; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 0.35rem;">
+                            Market Repository Coverage & Metrics
+                        </div>
+                        <div style="font-family: 'Cinzel', serif; font-size: 1.22rem; font-weight: 700; color: #F5F5F2;">
+                            {coverage_title}
+                        </div>
+                        <div style="color: #A8B0BA; font-size: 0.85rem; margin-top: 0.25rem;">
+                            {coverage_sub}
+                        </div>
                     </div>
-                    <div style="font-family: 'Cinzel', serif; font-size: 1.22rem; font-weight: 700; color: #F5F5F2;">
-                        {coverage_title}
-                    </div>
-                    <div style="color: #A8B0BA; font-size: 0.85rem; margin-top: 0.25rem;">
-                        {coverage_sub}
+                    <div style="display: flex; gap: 0.45rem; flex-wrap: wrap; align-items: center;">
+                        {badges_html}
                     </div>
                 </div>
-                <div style="display: flex; gap: 0.45rem; flex-wrap: wrap; align-items: center;">
-                    {badges_html}
-                </div>
-            </div>
-            
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1.25rem; padding-top: 1rem; border-top: 1px solid rgba(216, 168, 78, 0.16); font-size: 0.82rem; color: #CBD5E1;">
-                <div>
-                    <div style="font-size: 0.68rem; color: #34D399; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 0.2rem;">VERIFIED INTEGRITY</div>
-                    <div><strong>Analytical Honesty:</strong> Zero silent data fabrication</div>
-                </div>
-                <div>
-                    <div style="font-size: 0.68rem; color: #D8A84E; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 0.2rem;">STANDARDIZED BASIS</div>
-                    <div><strong>Parity Normalization:</strong> 999 & 995 fineness basis</div>
-                </div>
-                <div>
-                    <div style="font-size: 0.68rem; color: #D8A84E; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 0.2rem;">EXCHANGE CONSTRAINTS</div>
-                    <div><strong>Contract Awareness:</strong> Versioned MCX specifications</div>
-                </div>
-                <div>
-                    <div style="font-size: 0.68rem; color: #34D399; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 0.2rem;">EXECUTION PROTOCOL</div>
-                    <div><strong>Zero Look-Ahead:</strong> Strictly lagged backtest signals</div>
-                </div>
-            </div>
-        </div>
-        """,
-        unsafe_allow_html=True,
-    )
+            </div>""",
+            unsafe_allow_html=True,
+        )
+
+        # 4 Responsive Cards using Streamlit native columns
+        cov_col1, cov_col2, cov_col3, cov_col4 = st.columns(4)
+        with cov_col1:
+            st.markdown(
+                """<div class="coverage-metric-card">
+                    <div class="coverage-metric-tag" style="color: #34D399;">ANALYTICAL INTEGRITY</div>
+                    <div class="coverage-metric-title">Analytical Honesty</div>
+                    <div class="coverage-metric-desc">Missing or unavailable values are disclosed, not fabricated.</div>
+                </div>""",
+                unsafe_allow_html=True,
+            )
+        with cov_col2:
+            st.markdown(
+                """<div class="coverage-metric-card">
+                    <div class="coverage-metric-tag" style="color: #D8A84E;">STANDARDIZED BASIS</div>
+                    <div class="coverage-metric-title">Purity Normalization</div>
+                    <div class="coverage-metric-desc">999 and 995 fineness conversion basis.</div>
+                </div>""",
+                unsafe_allow_html=True,
+            )
+        with cov_col3:
+            st.markdown(
+                """<div class="coverage-metric-card">
+                    <div class="coverage-metric-tag" style="color: #D8A84E;">EXCHANGE SPECIFICATIONS</div>
+                    <div class="coverage-metric-title">Contract Awareness</div>
+                    <div class="coverage-metric-desc">Uses applicable MCX contract specifications.</div>
+                </div>""",
+                unsafe_allow_html=True,
+            )
+        with cov_col4:
+            st.markdown(
+                """<div class="coverage-metric-card">
+                    <div class="coverage-metric-tag" style="color: #34D399;">SIMULATION FIDELITY</div>
+                    <div class="coverage-metric-title">Zero Look-Ahead</div>
+                    <div class="coverage-metric-desc">Backtests use only information available at each point in time.</div>
+                </div>""",
+                unsafe_allow_html=True,
+            )
 
 
 # -----------------------------------------------------------------------------
