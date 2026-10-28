@@ -326,9 +326,64 @@ def get_global_css() -> str:
         background: rgba(11, 16, 23, 0.92);
         border: 1px solid rgba(216, 168, 78, 0.24);
         border-radius: 12px;
-        padding: 1.35rem 1.85rem;
-        margin-top: 2rem;
+        padding: 1.5rem 2rem;
+        margin-top: 0;
+        margin-bottom: 1.45rem;
         box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+    }}
+
+    /* Coverage & Metrics Cards Grid */
+    .coverage-metric-card {{
+        background: rgba(17, 24, 33, 0.75);
+        backdrop-filter: blur(14px);
+        -webkit-backdrop-filter: blur(14px);
+        border: 1px solid rgba(216, 168, 78, 0.18);
+        border-radius: 10px;
+        padding: 1.35rem 1.6rem;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        box-sizing: border-box;
+        transition: all 0.25s ease-in-out;
+        box-shadow: 0 4px 18px rgba(0, 0, 0, 0.35);
+        margin-bottom: 1.15rem;
+    }}
+    .coverage-metric-card:hover {{
+        border-color: rgba(216, 168, 78, 0.42);
+        background: rgba(17, 24, 33, 0.90);
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5), 0 0 16px rgba(216, 168, 78, 0.08);
+        transform: translateY(-2px);
+    }}
+    .coverage-card-header {{
+        display: flex;
+        align-items: center;
+        gap: 0.55rem;
+        margin-bottom: 0.55rem;
+    }}
+    .coverage-card-indicator {{
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background-color: {COLOR_GOLD_PRIMARY};
+        box-shadow: 0 0 6px rgba(216, 168, 78, 0.6);
+        flex-shrink: 0;
+    }}
+    .coverage-metric-title {{
+        font-family: 'Cinzel', serif !important;
+        font-size: 1.05rem;
+        font-weight: 700;
+        color: {COLOR_GOLD_PRIMARY};
+        letter-spacing: 0.02em;
+        line-height: 1.3;
+        margin: 0;
+    }}
+    .coverage-metric-desc {{
+        font-size: 0.88rem;
+        color: {COLOR_TEXT_SECONDARY};
+        line-height: 1.6;
+        margin: 0;
+        font-weight: 400;
     }}
 
     /* Consistent Metallic Gold Initial Badges across Sidebar & Navigation */
@@ -737,6 +792,14 @@ def get_global_css() -> str:
         }}
         .section-banner {{
             padding: 1.25rem 1.25rem !important;
+        }}
+        .coverage-metric-card {{
+            padding: 1.15rem 1.25rem !important;
+            margin-bottom: 0.85rem !important;
+        }}
+        .bottom-info-strip {{
+            padding: 1.25rem 1.25rem !important;
+            margin-bottom: 1rem !important;
         }}
     }}
 </style>
