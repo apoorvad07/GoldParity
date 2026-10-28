@@ -332,7 +332,7 @@ with st.sidebar:
                 <div style="color: #CBD5E1; margin-bottom: 0.15rem;">Loaded: <strong>{local_repo_rep.files_loaded} files</strong> ({local_repo_rep.total_rows} rows)</div>
                 <div style="color: #A0ABBA; font-size: 0.72rem;">Contracts: <code>{', '.join(local_repo_rep.contracts_found)}</code></div>
                 <div style="color: #A0ABBA; font-size: 0.72rem;">Date Span: <code>{local_repo_rep.date_range[0]} to {local_repo_rep.date_range[1]}</code></div>
-                {"<div style='color: #F2D58A; font-size: 0.7rem; margin-top: 0.2rem;'>Status: 1kg GOLD Benchmark Isolated</div>" if local_repo_rep.files_excluded > 0 else "<div style='color: #34D399; font-size: 0.7rem; margin-top: 0.2rem;'>Status: 1kg GOLD Benchmark Included</div>"}
+                {"<div style='color: #F2D58A; font-size: 0.7rem; margin-top: 0.2rem;'>Status: 1kg GOLD Benchmark Isolated</div>" if local_repo_rep.files_excluded > 0 else ("<div style='color: #34D399; font-size: 0.7rem; margin-top: 0.2rem;'>Status: 1kg GOLD Benchmark Included</div>" if "GOLD" in local_repo_rep.contracts_found else "<div style='color: #34D399; font-size: 0.7rem; margin-top: 0.2rem;'>Status: 4 Core Retail Contracts Active</div>")}
             </div>
             """,
             unsafe_allow_html=True,
@@ -1395,7 +1395,7 @@ elif nav_choice == "Data Quality":
 
             if local_repo_rep:
                 st.markdown(
-                    f"**Repository Directory**: `data/raw/` &nbsp;|&nbsp; **Files Ingested**: `{local_repo_rep.files_loaded} / {local_repo_rep.files_scanned}` &nbsp;|&nbsp; **Benchmark Isolated**: `{'Yes (1kg GOLD Excluded)' if local_repo_rep.files_excluded > 0 else 'No (1kg GOLD Included)'}`"
+                    f"**Repository Directory**: `data/raw/` &nbsp;|&nbsp; **Files Ingested**: `{local_repo_rep.files_loaded} / {local_repo_rep.files_scanned}` &nbsp;|&nbsp; **Benchmark Isolated**: `{'Yes (1kg GOLD Excluded)' if local_repo_rep.files_excluded > 0 else ('No (1kg GOLD Included)' if 'GOLD' in local_repo_rep.contracts_found else 'Core Retail Contracts Only')}`"
                 )
                 file_rows = []
                 for fs in local_repo_rep.file_summaries:

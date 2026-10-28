@@ -14,7 +14,6 @@ ENV/
 # Streamlit
 .streamlit/secrets.toml
 
-# Confidential / Proprietary Raw MCX Market Data (Requirement 11)
-data/raw/
+# Market Data Backups
 *.csv.bak
 *.xlsx.bak
