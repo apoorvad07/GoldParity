@@ -545,6 +545,12 @@ if nav_choice == "Home":
             use_container_width=True,
         )
 
+    # Clear Vertical Spacing & Section Divider Above Coverage & Metrics
+    st.markdown(
+        "<hr style='border: none; border-top: 1px solid rgba(216, 168, 78, 0.16); margin: 3.25rem 0 2.25rem 0;' />",
+        unsafe_allow_html=True,
+    )
+
     # Dynamic Bottom Information Strip
     if local_repo_rep and local_repo_rep.files_loaded > 0:
         coverage_title = f"Local MCX Historical Repository ({local_repo_rep.files_loaded} Files Ingested)"
@@ -570,13 +576,13 @@ if nav_choice == "Home":
             f"""<div class="bottom-info-strip">
                 <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 1.25rem;">
                     <div>
-                        <div style="font-size: 0.7rem; font-weight: 700; color: #D8A84E; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 0.35rem;">
+                        <div style="font-size: 0.72rem; font-weight: 700; color: #D8A84E; letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 0.45rem;">
                             Market Repository Coverage & Metrics
                         </div>
-                        <div style="font-family: 'Cinzel', serif; font-size: 1.22rem; font-weight: 700; color: #F5F5F2;">
+                        <div style="font-family: 'Cinzel', serif; font-size: 1.28rem; font-weight: 700; color: #F5F5F2; margin-bottom: 0.35rem;">
                             {coverage_title}
                         </div>
-                        <div style="color: #A8B0BA; font-size: 0.85rem; margin-top: 0.25rem;">
+                        <div style="color: #A8B0BA; font-size: 0.88rem; line-height: 1.55;">
                             {coverage_sub}
                         </div>
                     </div>
@@ -588,40 +594,50 @@ if nav_choice == "Home":
             unsafe_allow_html=True,
         )
 
-        # 4 Responsive Cards using Streamlit native columns
-        cov_col1, cov_col2, cov_col3, cov_col4 = st.columns(4)
-        with cov_col1:
+        # 4 Distinct Metric Cards in a Responsive 2-Column Grid (Desktop: 2x2, Mobile: 1x4)
+        row1_col1, row1_col2 = st.columns(2)
+        with row1_col1:
             st.markdown(
                 """<div class="coverage-metric-card">
-                    <div class="coverage-metric-tag" style="color: #34D399;">ANALYTICAL INTEGRITY</div>
-                    <div class="coverage-metric-title">Analytical Honesty</div>
+                    <div class="coverage-card-header">
+                        <span class="coverage-card-indicator"></span>
+                        <div class="coverage-metric-title">Analytical Honesty</div>
+                    </div>
                     <div class="coverage-metric-desc">Missing or unavailable values are disclosed, not fabricated.</div>
                 </div>""",
                 unsafe_allow_html=True,
             )
-        with cov_col2:
+        with row1_col2:
             st.markdown(
                 """<div class="coverage-metric-card">
-                    <div class="coverage-metric-tag" style="color: #D8A84E;">STANDARDIZED BASIS</div>
-                    <div class="coverage-metric-title">Purity Normalization</div>
+                    <div class="coverage-card-header">
+                        <span class="coverage-card-indicator"></span>
+                        <div class="coverage-metric-title">Purity Normalization</div>
+                    </div>
                     <div class="coverage-metric-desc">999 and 995 fineness conversion basis.</div>
                 </div>""",
                 unsafe_allow_html=True,
             )
-        with cov_col3:
+
+        row2_col1, row2_col2 = st.columns(2)
+        with row2_col1:
             st.markdown(
                 """<div class="coverage-metric-card">
-                    <div class="coverage-metric-tag" style="color: #D8A84E;">EXCHANGE SPECIFICATIONS</div>
-                    <div class="coverage-metric-title">Contract Awareness</div>
+                    <div class="coverage-card-header">
+                        <span class="coverage-card-indicator"></span>
+                        <div class="coverage-metric-title">Contract Awareness</div>
+                    </div>
                     <div class="coverage-metric-desc">Uses applicable MCX contract specifications.</div>
                 </div>""",
                 unsafe_allow_html=True,
             )
-        with cov_col4:
+        with row2_col2:
             st.markdown(
                 """<div class="coverage-metric-card">
-                    <div class="coverage-metric-tag" style="color: #34D399;">SIMULATION FIDELITY</div>
-                    <div class="coverage-metric-title">Zero Look-Ahead</div>
+                    <div class="coverage-card-header">
+                        <span class="coverage-card-indicator"></span>
+                        <div class="coverage-metric-title">Zero Look-Ahead</div>
+                    </div>
                     <div class="coverage-metric-desc">Backtests use only information available at each point in time.</div>
                 </div>""",
                 unsafe_allow_html=True,
